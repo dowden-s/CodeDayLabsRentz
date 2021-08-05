@@ -72,4 +72,10 @@ public class Car extends Vehicle
 	{
 		super.setMyCanRent(theCanRent);
 	}
+	
+	@Override
+	public boolean getMyCanRent()
+	{
+		return super.getMyCanRent();
+	}
 }
