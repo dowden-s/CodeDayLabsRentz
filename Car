@@ -1,0 +1,75 @@
+public class Car extends Vehicle
+{
+	private double myCarFare;
+	private boolean myLuxury;
+	private boolean myNavigation;
+	private boolean myDrivingAssistance;
+	
+	public Car(int theVehicleID, String theVIN, String theName, boolean theCanRent, boolean theLuxury, boolean theNavigation, boolean theDrivingAssistance)
+	{
+		super(theVehicleID, theVIN, theName, theCanRent);
+		this.myLuxury = theLuxury;
+		this.myNavigation = theNavigation;
+		this.myDrivingAssistance = theDrivingAssistance;
+	}
+	
+	@Override
+	public double calculateRentalAmount()
+	{
+		this.myCarFare = 3*super.getMyFare();
+		
+		if(this.myLuxury==true)
+		{
+			this.myCarFare += 10.00;
+		}
+		
+		if(this.myNavigation==true)
+		{
+			this.myCarFare += 1.00;
+		}
+		
+		if(this.myDrivingAssistance==true)
+		{
+			this.myCarFare += 2.00;
+		}
+		
+		return this.myCarFare;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String result =  "Car (ID: " + super.getMyVehicleID() +
+				", Name: " + super.getMyName() + 
+				", VIN: " + super.getMyVIN() + 
+				", CanRent?: " + super.getMyCanRent() +
+				", IsLuxury?: " + this.myLuxury +
+				", HasNavigation?: " + this.myNavigation +
+				", HasAssistance?: " + this.myDrivingAssistance;
+		return result;
+	}
+	
+	@Override 
+	public String getMyVIN()
+	{
+		return super.getMyVIN();
+	}
+	
+	@Override
+	public String getMyName()
+	{
+		return super.getMyName();
+	}
+	
+	@Override
+	public int getMyVehicleID()
+	{
+		return super.getMyVehicleID();
+	}
+	
+	@Override
+	public void setMyCanRent(boolean theCanRent)
+	{
+		super.setMyCanRent(theCanRent);
+	}
+}
