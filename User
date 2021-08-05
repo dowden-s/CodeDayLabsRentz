@@ -1,0 +1,83 @@
+public class User
+{
+	private String myName;
+	private String myPassword;
+    private boolean myVIPStatus;
+    private String myVIN;
+
+    public User(String theName, String thePassword) 
+    {
+        this.myName = theName;
+        this.myPassword = thePassword;
+        this.myVIPStatus = false;
+        this.myVIN = "null";
+        
+    }
+
+    public User(String theName, String thePassword, boolean theVIPStatus)
+    {
+        this.myName = theName;
+        this.myPassword = thePassword;
+        this.myVIPStatus = theVIPStatus;
+        this.myVIN = "null";
+    }
+    
+    public User(String theName, String thePassword, boolean theVIPStatus, String theVIN)
+    {
+    	this.myName = theName;
+    	this.myPassword = thePassword;
+    	this.myVIPStatus = theVIPStatus;
+    	this.myVIN = theVIN;
+    }
+
+    public String getMyName()
+    {
+        return this.myName; 
+    }
+
+    public String getMyPassword()
+    {
+        return this.myPassword;
+    }
+
+    public boolean getMyVIPStatus() 
+    {
+        return this.myVIPStatus;
+    }
+    
+    public String getMyVIN()
+    {
+    	return this.myVIN;
+    }
+    
+    public void setMyVIN(String theVIN)
+    {
+    	this.myVIN = theVIN;
+    }
+    
+    
+    public String toString()
+    {
+        String result = this.myVIN + ", " + this.myName + ", " + this.myPassword + ", " + this.myVIPStatus;
+        
+        return result;
+    }
+    
+    @Override
+    public boolean equals(Object theOtherObject)
+    {
+    	if(theOtherObject instanceof User)
+    	{
+    		User theOtherUser = (User) theOtherObject;
+        	boolean answer1 = this.myName.equals(theOtherUser.getMyName());
+        	boolean answer2 = this.myPassword.equals(theOtherUser.getMyPassword()); 
+        	boolean answer3 = this.myVIPStatus==(theOtherUser.getMyVIPStatus());
+        	return (answer1==true)&&(answer2==true)&&(answer3==true);
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+
+}
