@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+
+public class RentalManager 
+{
+	private ArrayList<Vehicle> myVehicleArrayList = new ArrayList<Vehicle>();
+	private int myIDNumber;
+	
+	public RentalManager()
+	{
+		myVehicleArrayList.add(new Car(this.myIDNumber, "V100", "Fiat", true, false, false, false));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new Car(this.myIDNumber, "V101", "Outback", true, true, true, false));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new Car(this.myIDNumber, "V102", "BMW", true, true, true, true));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new MotorBike(this.myIDNumber, "B100", "Bike1", true, false));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new MotorBike(this.myIDNumber, "B101", "Bike2", true, true));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new Bicycle(this.myIDNumber, "C100", "Roadies", true, "Road"));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new Bicycle(this.myIDNumber, "C101", "Cruiser", true, "Cruiser"));
+		myIDNumber++;
+		
+		myVehicleArrayList.add(new Bicycle(this.myIDNumber, "C102", "Mountain", true, "Mountain"));
+		myIDNumber++;
+	}
+	
+	public ArrayList<Vehicle> getMyVehicleArrayList()
+	{
+		return this.myVehicleArrayList;
+	}
+}
