@@ -138,6 +138,7 @@ public class Registration
     	
     	while(run==true)
     	{
+    		System.out.println("**********************");
     		System.out.print("Enter 1, 2, or 3 (1. Rent, 2. Drop-off, 3. Exit): ");
     		int selection = Integer.parseInt(input.nextLine().trim());
     		
@@ -160,7 +161,7 @@ public class Registration
         			System.out.print("Enter the VIN: ");
         			String theVIN = input.nextLine();
         			
-        			while(getVehiclePosition(theRentalManager, theVIN)==-1)
+        			while(getVehiclePosition(theRentalManager, theVIN) == -1)
         			{
         				System.out.print("Please enter the VIN of an available car: ");
         				theVIN = input.nextLine();
@@ -191,7 +192,7 @@ public class Registration
         			System.out.println("Cost Per Day: " + totalAmount);
         			totalAmount *= theNumberOfDays;
         			System.out.println("Number of Rental Days: " + theNumberOfDays);
-        			System.out.println("Total Amount: " + totalAmount);
+        			System.out.println("Total Amount: $" + totalAmount);
         			totalAmount += 5;
         			System.out.println("Insurance: $5");
         			if(theUser.getMyVIPStatus()==true)
@@ -201,55 +202,38 @@ public class Registration
         			}
         			double tax = Math.round((totalAmount*0.07) * 100.0) / 100.0;
         			totalAmount += tax;
-        			System.out.println("Total Rent: " + totalAmount);
+        			System.out.println("Tax: $" + tax);
+        			System.out.println("Total Rent: $" + totalAmount);
         			System.out.println("Rent Successful");
+        			
+        			System.out.println("**********************");
         			
         			theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theVIN)).setMyCanRent(false);
         			theUser.setMyVIN(theVIN);
+        			
     			}
     			else
     			{
     				System.out.println("It appears as if you cannot rent a vehicle at this time, as you already have one rented.");
     				System.out.println("Please return your vehicle first before you rent a new one.");
+    				System.out.println("**********************");
     			}
     			
-    			System.out.print("Do you want to continue? (Enter 'yes' or 'no'): ");
-    			String answer = input.nextLine();
-    			
-    			boolean test = false;
-    			if(answer.equals("yes") || answer.equals("no"))
-    			{
-    				test = true;
-    			}
-    			while(test==false)
-    			{
-    				System.out.print("Please enter either 'yes' or 'no': ");
-    				answer = input.nextLine();
-    				
-    				if(answer.equals("yes") || answer.equals("no"))
-        			{
-        				test = true;
-        			}
-    			}
-    			
-    			if(answer.equals("no"))
-    			{
-    				run = false;
-    			}
-    			
-    			
+    			System.out.println();
     		}
-    		else if(selection==2)
+
+    		if(selection==2)
     		{
     			if(theUser.getMyVIN().equals("null"))
     			{
     				System.out.println("You do not currently have any vehicles rented in order to return them.");
     				System.out.println("Please rent a vehicle before you return one.");
+    				System.out.println("**********************");
     			}
     			else
     			{
     				System.out.println("Would you like to drop-off vehicle " + theUser.getMyVIN() + "?");
-    				System.out.print("Enter 'yes' or 'no'");
+    				System.out.print("Enter 'yes' or 'no'): ");
     				String dropOffAnswer = input.nextLine();
     				
     				boolean bool = false;
@@ -260,54 +244,41 @@ public class Registration
     				
     				while(bool==false)
     				{
-    					System.out.println("Please enter either 'yes' or 'no'");
+    					System.out.println("Please enter either 'yes' or 'no'): ");
     					dropOffAnswer = input.nextLine();
+    					
+    					if(dropOffAnswer.equals("yes") || dropOffAnswer.equals("no"))
+        				{
+        					bool = true;
+        				}
     				}
     				
     				if(dropOffAnswer.equals("yes"))
     				{
-    					System.out.println("Drop-off Succesfull");
-    					theUser.setMyVIN("false");
-    					theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theUser.getMyVIN())).setMyCanRent(true);
+    					int i = getVehiclePosition2(theRentalManager, theUser.getMyVIN());
+    					theRentalManager.getMyVehicleArrayList().get(i).setMyCanRent(true);
+    					theUser.setMyVIN("null");
+    					
+    					System.out.println("Drop-off Successful");
+    					System.out.println("**********************");
     				}
     				else
     				{
     					System.out.println("We are glad you are still happy with your vehicle selection.");
+    					System.out.println("**********************");
     				}
     			}
     			
-    			System.out.print("Do you want to continue? (Enter 'yes' or 'no'): ");
-    			String answer = input.nextLine();
-    			
-    			boolean test = false;
-    			if(answer.equals("yes") || answer.equals("no"))
-    			{
-    				test = true;
-    			}
-    			while(test==false)
-    			{
-    				System.out.print("Please enter either 'yes' or 'no': ");
-    				answer = input.nextLine();
-    				
-    				if(answer.equals("yes") || answer.equals("no"))
-        			{
-        				test = true;
-        			}
-    			}
-    			
-    			if(answer.equals("no"))
-    			{
-    				run = false;
-    			}
+    			System.out.println();
     		}
-    		else if(selection==3)
+    		
+    		if(selection==3)
     		{
     			run = false;
+    			System.out.println();
     		}
     		
     	}
-    	
-    	input.close();
     }
     
     public static int getVehiclePosition(RentalManager theRentalManager, String theVIN)
@@ -325,6 +296,31 @@ public class Registration
     	return -1;
     }
     
+    public static int getVehiclePosition2(RentalManager theRentalManager, String theVIN)
+    {
+    	for(int i=0; i<theRentalManager.getMyVehicleArrayList().size(); i++)
+    	{
+    		if(theVIN.equals(theRentalManager.getMyVehicleArrayList().get(i).getMyVIN()))
+    		{
+    			return i;
+    		}
+    	}
+    	return -1;
+    }
+    
+    public static void updateRentalManager(ArrayList<User> theUserArrayList, RentalManager theRentalManager)
+    {
+    	for(int i=0; i<theUserArrayList.size(); i++)
+    	{
+    		String theVIN = theUserArrayList.get(i).getMyVIN();
+    		if(!theVIN.equals("null"))
+    		{
+    			int vehiclePosition = getVehiclePosition(theRentalManager, theVIN);
+    			theRentalManager.getMyVehicleArrayList().get(vehiclePosition).setMyCanRent(false);
+    		}
+    	}
+    }
+    
     public static void main(String[] args)throws Exception
     {
         Scanner input = new Scanner(System.in);
@@ -337,8 +333,15 @@ public class Registration
 
         while(run==true)
         {
-            System.out.print("Enter 1, 2, or 3 (1. New Registration 2. Login 3. Quit): ");
+            System.out.print("Enter 1, 2, or 3 (1. New Registration, 2. Login, 3. Quit): ");
             int selection = Integer.parseInt(input.nextLine().trim());
+            
+            boolean check = ( (selection>0) && (selection<4) );
+            while(check==false)
+            {
+            	System.out.print("Please enter a valid selection: ");
+            	selection = Integer.parseInt(input.nextLine().trim());
+            }
 
             if(selection==1)
             {
@@ -411,7 +414,8 @@ public class Registration
 
 
             }
-            else if(selection==2)
+            
+            if(selection==2)
             {
             	System.out.println("\nYou entered option " + selection);
                 System.out.println("********************** \n" + "Enter Details \n"
@@ -475,18 +479,25 @@ public class Registration
                 System.out.println("********************** \n");
                 
                 RentalManager rentalManager = new RentalManager();
+                
+                updateRentalManager(userArrayList, rentalManager);
+                
                 printVehicleList(rentalManager);
                 
                 rentalMain(userArrayList.get(userPosition(userName, userArrayList)), rentalManager);
                 
                
             }
-            else if(selection == 3){
+
+            if(selection == 3)
+            {
                 run = false;
             }
         }
 
-        System.out.println("\nThank you for using our vehicle rental system.");
+        System.out.println("\nThank you for using Rentz.");
         updateUserFile(fileName, userArrayList);
+        
+        input.close();
     }
 }
