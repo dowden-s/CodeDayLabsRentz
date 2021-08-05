@@ -1,0 +1,72 @@
+public class Bicycle extends Vehicle
+{
+	private double myBicycleFare;
+	private String myType;
+	
+	public Bicycle(int theVehicleID, String theVIN, String theName, boolean theCanRent, String theType)
+	{
+		super(theVehicleID, theVIN, theName, theCanRent);
+		this.myType = theType;
+	}
+	
+	@Override
+	public double calculateRentalAmount()
+	{
+		this.myBicycleFare = super.getMyFare();
+		
+		if(this.myType.equals("Mountain"))
+		{
+			this.myBicycleFare *= 1.01;
+		}
+		
+		if(this.myType.equals("Cruiser"))
+		{
+			this.myBicycleFare *= 1.02;
+		}
+		
+		if(this.myType.equals("Hybrid"))
+		{
+			this.myBicycleFare *= 1.04;
+		}
+		
+		myBicycleFare = Math.round(myBicycleFare * 100.0) / 100.0;
+		
+		return myBicycleFare;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String result = "Bicycle (ID: " + super.getMyVehicleID() +
+				", Name: " + super.getMyName() + 
+				", VIN: " + super.getMyVIN() + 
+				", CanRent?: " + super.getMyCanRent() +
+				", CycleType: " + this.myType;
+		
+		return result;
+	}
+	
+	@Override 
+	public String getMyVIN()
+	{
+		return super.getMyVIN();
+	}
+	
+	@Override
+	public String getMyName()
+	{
+		return super.getMyName();
+	}
+	
+	@Override
+	public int getMyVehicleID()
+	{
+		return super.getMyVehicleID();
+	}
+	
+	@Override
+	public void setMyCanRent(boolean theCanRent)
+	{
+		super.setMyCanRent(theCanRent);
+	}
+}
