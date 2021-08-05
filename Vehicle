@@ -1,0 +1,51 @@
+public abstract class Vehicle 
+{
+	private int myVehicleID;
+	private String myVIN;
+	private String myName;
+	private boolean myCanRent;
+	final private double myFare = 10.00;
+	
+	public Vehicle(int theVehicleID, String theVIN, String theName, boolean theCanRent)
+	{
+		this.myVehicleID = theVehicleID;
+		this.myVIN = theVIN;
+		this.myName = theName; 
+		this.myCanRent = theCanRent;
+	}
+	
+	public int getMyVehicleID()
+	{
+		return this.myVehicleID;
+	}
+	
+	public String getMyVIN()
+	{
+		return this.myVIN;
+	}
+	
+	public String getMyName()
+	{
+		return this.myName;
+	}
+	
+	public double getMyFare()
+	{
+		return this.myFare;
+	}
+	
+	public boolean getMyCanRent()
+	{
+		return this.myCanRent;
+	}
+	
+	public void setMyCanRent(boolean theCanRent)
+	{
+		this.myCanRent = theCanRent;
+	}
+	
+	public abstract String toString();
+	
+	public abstract double calculateRentalAmount();
+	
+}
