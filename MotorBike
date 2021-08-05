@@ -57,4 +57,10 @@ public class MotorBike extends Vehicle
 	{
 		super.setMyCanRent(theCanRent);
 	}
+	
+	@Override
+	public boolean getMyCanRent()
+	{
+		return super.getMyCanRent();
+	}
 }
