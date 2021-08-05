@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class RentalManager 
 {
 	private ArrayList<Vehicle> myVehicleArrayList = new ArrayList<Vehicle>();
-	private int myIDNumber;
+	private int myIDNumber=1;
 	
 	public RentalManager()
 	{
