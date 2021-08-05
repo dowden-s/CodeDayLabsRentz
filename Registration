@@ -1,0 +1,492 @@
+import java.io.*;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.FileWriter; 
+ 
+
+public class Registration  
+{
+    public static void getMyUserList(String fileName, ArrayList<User> arrList)throws Exception
+    {
+        File file = new File(fileName);
+
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        String st;
+        while((st = bufferedReader.readLine()) != null)
+        {
+            int num = st.indexOf(",");
+            String theVIN = st.substring(0, num);
+            st = st.substring(num + 2);
+            
+            num = st.indexOf(",");
+            String one = st.substring(0, num);
+            st = st.substring(num + 2);
+            
+            num = st.indexOf(",");
+            String two = st.substring(0, num);
+            st.substring(num + 2);
+            boolean three = Boolean.parseBoolean(st);
+            
+            arrList.add(new User(one, two, three, theVIN));
+        }
+        bufferedReader.close();
+    }
+
+    public static void updateUserFile(String fileName, ArrayList<User> arrList)throws Exception
+    {
+        PrintWriter writer = new PrintWriter(fileName);
+        writer.print("");
+        writer.close();
+
+        FileWriter writer2 = new FileWriter(fileName);
+
+        for(int i=0; i<arrList.size(); i++)
+        {
+            writer2.write(arrList.get(i).toString() + System.lineSeparator());
+        }
+        writer2.close();
+    }
+
+    public static boolean checkUsername(String username, ArrayList<User> arrList)
+    {
+        for(int i=0; i<arrList.size(); i++)
+        {
+            if(username.equals(arrList.get(i).getMyName()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int userPosition(String username, ArrayList<User> arrList)
+    {
+        for(int i=0; i<arrList.size(); i++)
+        {
+            if(username.equals(arrList.get(i).getMyName()))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public static boolean checkPasswordStrength(String thePassword)
+    {
+    	if(thePassword.length()<5)
+    	{
+    		return false;
+    	}
+    	
+    	boolean numberCheck = false;
+    	boolean uppercaseLetterCheck = false;
+    	boolean characterCheck = false;
+    	
+    	for(int i=0; i<thePassword.length(); i++)
+    	{
+    		char character = thePassword.charAt(i);
+    		int num = (int) character;
+    		
+    		if((num>=33)&&(num<=47))
+    		{
+    			characterCheck = true;
+    		}
+    		
+    		if(num==64)
+    		{
+    			characterCheck = true;
+    		}
+    		
+    		if((num>=48)&&(num<=57))
+    		{
+    			numberCheck = true;
+    		}
+    		
+    		if((num>=65)&&(num<=90))
+    		{
+    			uppercaseLetterCheck = true;
+    		}
+    	}
+    	
+    	if((characterCheck==true)&&(numberCheck==true)&&(uppercaseLetterCheck==true))
+    	{
+    		return true;
+    	}
+    	
+    	return false;
+    }
+
+    public static void printVehicleList(RentalManager theRentalManager)
+    {
+    	 System.out.println("**********************");
+         System.out.println("Vehicle List:");
+         System.out.println("**********************");
+         
+         for(int i=0; i<theRentalManager.getMyVehicleArrayList().size(); i++)
+         {
+         	System.out.println(theRentalManager.getMyVehicleArrayList().get(i).toString());
+         }
+         
+         System.out.println();
+    }
+    
+    public static void rentalMain(User theUser, RentalManager theRentalManager)
+    {
+    	Scanner input = new Scanner(System.in);
+    	boolean run = true;
+    	
+    	while(run==true)
+    	{
+    		System.out.print("Enter 1, 2, or 3 (1. Rent, 2. Drop-off, 3. Exit): ");
+    		int selection = Integer.parseInt(input.nextLine().trim());
+    		
+    		while( (selection<1) || (selection>3) )
+    		{
+    			System.out.print("Please re-enter a valid selection: ");
+    			selection = Integer.parseInt(input.nextLine().trim());
+    		}
+    		
+    		if(selection==1)
+    		{
+    			if(theUser.getMyVIN().equals("null"))
+    			{
+    				printVehicleList(theRentalManager);
+        			
+        			System.out.println("**********************");
+        			System.out.println("Enter Rental Details");
+        			System.out.println("**********************");
+        			
+        			System.out.print("Enter the VIN: ");
+        			String theVIN = input.nextLine();
+        			
+        			while(getVehiclePosition(theRentalManager, theVIN)==-1)
+        			{
+        				System.out.print("Please enter the VIN of an available car: ");
+        				theVIN = input.nextLine();
+        			}
+        			
+        			System.out.print("Enter the Number of Days: ");
+        			int theNumberOfDays = Integer.parseInt(input.nextLine().trim());
+        			
+        			while(theNumberOfDays<0)
+        			{
+        				System.out.print("Please enter a valid number of days: ");
+        				theNumberOfDays = Integer.parseInt(input.nextLine().trim());
+        			}
+        			
+        			System.out.println("**********************");
+        			System.out.println("Rental Bill Summary");
+        			System.out.println("**********************");
+        			
+        			System.out.println("User Name: " + theUser.getMyName());
+        			
+        			System.out.println("----Vehicle Information----");
+        			System.out.println("Vehicle Name: " + theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theVIN)).getMyName());
+        			System.out.println("Vehicle ID: " + theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theVIN)).getMyVehicleID());
+        			System.out.println("VIN: " + theVIN);
+        			
+        			System.out.println("----Cost Information----");
+        			double totalAmount = theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theVIN)).calculateRentalAmount();
+        			System.out.println("Cost Per Day: " + totalAmount);
+        			totalAmount *= theNumberOfDays;
+        			System.out.println("Number of Rental Days: " + theNumberOfDays);
+        			System.out.println("Total Amount: " + totalAmount);
+        			totalAmount += 5;
+        			System.out.println("Insurance: $5");
+        			if(theUser.getMyVIPStatus()==true)
+        			{
+        				totalAmount -= 5;
+        				System.out.println("VIP Discount: $5");
+        			}
+        			double tax = Math.round((totalAmount*0.07) * 100.0) / 100.0;
+        			totalAmount += tax;
+        			System.out.println("Total Rent: " + totalAmount);
+        			System.out.println("Rent Successful");
+        			
+        			theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theVIN)).setMyCanRent(false);
+        			theUser.setMyVIN(theVIN);
+    			}
+    			else
+    			{
+    				System.out.println("It appears as if you cannot rent a vehicle at this time, as you already have one rented.");
+    				System.out.println("Please return your vehicle first before you rent a new one.");
+    			}
+    			
+    			System.out.print("Do you want to continue? (Enter 'yes' or 'no'): ");
+    			String answer = input.nextLine();
+    			
+    			boolean test = false;
+    			if(answer.equals("yes") || answer.equals("no"))
+    			{
+    				test = true;
+    			}
+    			while(test==false)
+    			{
+    				System.out.print("Please enter either 'yes' or 'no': ");
+    				answer = input.nextLine();
+    				
+    				if(answer.equals("yes") || answer.equals("no"))
+        			{
+        				test = true;
+        			}
+    			}
+    			
+    			if(answer.equals("no"))
+    			{
+    				run = false;
+    			}
+    			
+    			
+    		}
+    		else if(selection==2)
+    		{
+    			if(theUser.getMyVIN().equals("null"))
+    			{
+    				System.out.println("You do not currently have any vehicles rented in order to return them.");
+    				System.out.println("Please rent a vehicle before you return one.");
+    			}
+    			else
+    			{
+    				System.out.println("Would you like to drop-off vehicle " + theUser.getMyVIN() + "?");
+    				System.out.print("Enter 'yes' or 'no'");
+    				String dropOffAnswer = input.nextLine();
+    				
+    				boolean bool = false;
+    				if(dropOffAnswer.equals("yes") || dropOffAnswer.equals("no"))
+    				{
+    					bool = true;
+    				}
+    				
+    				while(bool==false)
+    				{
+    					System.out.println("Please enter either 'yes' or 'no'");
+    					dropOffAnswer = input.nextLine();
+    				}
+    				
+    				if(dropOffAnswer.equals("yes"))
+    				{
+    					System.out.println("Drop-off Succesfull");
+    					theUser.setMyVIN("false");
+    					theRentalManager.getMyVehicleArrayList().get(getVehiclePosition(theRentalManager, theUser.getMyVIN())).setMyCanRent(true);
+    				}
+    				else
+    				{
+    					System.out.println("We are glad you are still happy with your vehicle selection.");
+    				}
+    			}
+    			
+    			System.out.print("Do you want to continue? (Enter 'yes' or 'no'): ");
+    			String answer = input.nextLine();
+    			
+    			boolean test = false;
+    			if(answer.equals("yes") || answer.equals("no"))
+    			{
+    				test = true;
+    			}
+    			while(test==false)
+    			{
+    				System.out.print("Please enter either 'yes' or 'no': ");
+    				answer = input.nextLine();
+    				
+    				if(answer.equals("yes") || answer.equals("no"))
+        			{
+        				test = true;
+        			}
+    			}
+    			
+    			if(answer.equals("no"))
+    			{
+    				run = false;
+    			}
+    		}
+    		else if(selection==3)
+    		{
+    			run = false;
+    		}
+    		
+    	}
+    	
+    	input.close();
+    }
+    
+    public static int getVehiclePosition(RentalManager theRentalManager, String theVIN)
+    {
+    	for(int i=0; i<theRentalManager.getMyVehicleArrayList().size(); i++)
+    	{
+    		if(theVIN.equals(theRentalManager.getMyVehicleArrayList().get(i).getMyVIN()))
+    		{
+    			if(theRentalManager.getMyVehicleArrayList().get(i).getMyCanRent()==true)
+    			{
+    				return i;
+    			}
+    		}
+    	}
+    	return -1;
+    }
+    
+    public static void main(String[] args)throws Exception
+    {
+        Scanner input = new Scanner(System.in);
+
+        ArrayList<User> userArrayList = new ArrayList<User>();
+        String fileName = "C:\\Users\\bjjsa\\eclipse-workspace - 2021\\CodeDay Labs 2.0\\src\\User List";
+        getMyUserList(fileName, userArrayList);
+
+        boolean run = true;
+
+        while(run==true)
+        {
+            System.out.print("Enter 1, 2, or 3 (1. New Registration 2. Login 3. Quit): ");
+            int selection = Integer.parseInt(input.nextLine().trim());
+
+            if(selection==1)
+            {
+            	System.out.println("\nYou entered option " + selection);
+                System.out.println("********************** \n" + "Enter Details \n"
+                        + "**********************");
+            	
+                System.out.print("Username: ");
+                String userName = input.nextLine();
+
+                boolean status;
+                if(checkUsername(userName, userArrayList)==true)
+                {
+                    status = true;
+                }
+                else
+                {
+                    status = false;
+                }
+                while(status==true)
+                {
+                    System.out.print("User already exists, enter different user name: ");
+                    userName = input.nextLine();
+                    if(checkUsername(userName, userArrayList)==false)
+                    {
+                        status = false;
+                    }
+                }
+                
+                System.out.println("Your password must be at least 5 characters long.");
+                System.out.println("Your password must also contain 1 character, 1 uppercase letter, and 1 number");
+                System.out.print("Password: ");
+                String password = input.nextLine();
+                while(checkPasswordStrength(password)==false)
+                {
+                	System.out.print("Please enter a stronger password: ");
+                	password = input.nextLine();
+                }
+
+                System.out.print("isVIP(true/false): ");
+                String vipStat = input.nextLine().toLowerCase(Locale.ROOT);
+                Boolean vipStatus = null;
+                if ("true".equals(vipStat))
+                {
+                    vipStatus = true;
+
+                }
+                else if ("false".equals(vipStat))
+                {
+                    vipStatus = false;
+                }
+                while(vipStatus == null)
+                {
+                    System.out.print("PLease enter true or false:");
+                    vipStat= input.nextLine().toLowerCase(Locale.ROOT);
+
+                    if ("true".equals(vipStat))
+                    {
+                        vipStatus = true;
+
+                    }
+                    else if ("false".equals(vipStat))
+                    {
+                        vipStatus = false;
+                    }
+                }
+                System.out.println("Registration Successful"); 
+                System.out.println();
+                userArrayList.add(new User(userName, password, vipStatus));
+
+
+            }
+            else if(selection==2)
+            {
+            	System.out.println("\nYou entered option " + selection);
+                System.out.println("********************** \n" + "Enter Details \n"
+                        + "**********************");
+                
+                boolean status;
+                int num;
+
+                System.out.print("User Name: ");
+                String userName = input.nextLine();
+
+                System.out.print("Password: ");
+                String password = input.nextLine();
+
+                if(checkUsername(userName, userArrayList)==true)
+                {
+                    num = userPosition(userName, userArrayList);
+                    if(userArrayList.get(num).getMyPassword().equals(password))
+                    {
+                        status = true;
+                    }
+                    else
+                    {
+                        status = false;
+                    }
+                }
+                else
+                {
+                    status = false;
+                }
+
+                while(status==false)
+                {
+                    System.out.println("Wrong Credentials");
+
+                    System.out.print("Enter User Name: ");
+                    userName = input.nextLine();
+
+                    System.out.print("Enter Password: ");
+                    password = input.nextLine();
+
+                    if(checkUsername(userName, userArrayList)==true)
+                    {
+                        num = userPosition(userName, userArrayList);
+                        if(userArrayList.get(num).getMyPassword().equals(password))
+                        {
+                            status = true;
+                        }
+                        else
+                        {
+                            status = false;
+                        }
+                    }
+                    else
+                    {
+                        status = false;
+                    }
+                }
+
+                System.out.println("Login Successful");
+                System.out.println("********************** \n");
+                
+                RentalManager rentalManager = new RentalManager();
+                printVehicleList(rentalManager);
+                
+                rentalMain(userArrayList.get(userPosition(userName, userArrayList)), rentalManager);
+                
+               
+            }
+            else if(selection == 3){
+                run = false;
+            }
+        }
+
+        System.out.println("\nThank you for using our vehicle rental system.");
+        updateUserFile(fileName, userArrayList);
+    }
+}
