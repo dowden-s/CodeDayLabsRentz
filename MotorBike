@@ -1,0 +1,60 @@
+public class MotorBike extends Vehicle
+{
+	private double myMotorBikeFare;
+	private boolean myTouring;
+	
+	public MotorBike(int theVehicleID, String theVIN, String theName, boolean theCanRent, boolean theTouring)
+	{
+		super(theVehicleID, theVIN, theName, theCanRent);
+		this.myTouring = theTouring;
+	}
+	
+	@Override
+	public double calculateRentalAmount()
+	{
+		this.myMotorBikeFare = 2*super.getMyFare();
+		
+		if(myTouring==true)
+		{
+			this.myMotorBikeFare += 5.00;
+		}
+		
+		return myMotorBikeFare;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String result = "MotorBike (ID: " + super.getMyVehicleID() +
+				", Name: " + super.getMyName() + 
+				", VIN: " + super.getMyVIN() + 
+				", CanRent?: " + super.getMyCanRent() +
+				", IsTouring?: " + this.myTouring;
+		
+		return result;
+	}
+	
+	@Override 
+	public String getMyVIN()
+	{
+		return super.getMyVIN();
+	}
+	
+	@Override
+	public String getMyName()
+	{
+		return super.getMyName();
+	}
+	
+	@Override
+	public int getMyVehicleID()
+	{
+		return super.getMyVehicleID();
+	}
+	
+	@Override
+	public void setMyCanRent(boolean theCanRent)
+	{
+		super.setMyCanRent(theCanRent);
+	}
+}
