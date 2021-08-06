@@ -1,0 +1,70 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class UserTest {
+
+	private User u = new User("sd", "dinosaur", false);
+	private User un = new User("dinosaur", "pineapple");
+
+
+	@Test
+	void testGetMyName() {
+		assertTrue("sd".equals(u.getMyName()));
+	}
+
+	@Test
+	void testGetMyPassword() {
+		assertTrue("dinosaur".equals(u.getMyPassword()));
+	}
+
+	@Test
+	void testGetMyVIPStatusTrue() {
+		assertEquals(false, u.getMyVIPStatus());
+	}
+	
+	@Test
+	void testGetMyVIPStatusFalse()
+	{
+		assertNotEquals(true, u.getMyVIPStatus()); 
+	}
+
+	@Test
+	void testToString() {
+		String test = "sd, dinosaur, false";
+		assertFalse(test.equals(u.toString()));
+	}
+
+	@Test
+	void testEqualsObject() {
+		assertNotEquals(u.toString(), new User("1", "2", false).toString());
+	}
+	
+	@Test
+	void testEqualsMethod()
+	{
+		u.setMyVIN("B100");
+		assertTrue(u.equals(u)); 
+	} 
+	
+	@Test
+	void testEqualsMethod2()
+	{
+		un.setMyVIN("V102");
+		assertFalse(u.equals(un));
+	}
+	
+	@Test
+	void testEqualMethod3()
+	{
+		assertFalse(u.equals(2));
+	}
+	
+	@Test
+	void testMyVIN()
+	{
+		un.setMyVIN("C100");
+		assertTrue(un.getMyVIN().equals("C100"));
+	}
